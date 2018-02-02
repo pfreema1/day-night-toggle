@@ -44,6 +44,8 @@ class App extends Component {
   }
 
   handleClick = () => {
+    //first set imgSrc to new src with cache buster, increment key to restart animation, and put opacityNum at
+    //0 so the animation restarts
     this.setState(prevState => {
       console.log(prevState);
       return {
@@ -55,6 +57,7 @@ class App extends Component {
       };
     });
 
+    //load the image and when it is loaded, re-set the opacityNum to 1 so the animation will run
     this.loadImage(
       "http://thecatapi.com/api/images/get?format=src&type=gif&" +
         this.state.key
