@@ -2,49 +2,105 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { Motion, StaggeredMotion, spring } from "react-motion";
 
-const colorArray = ["#DA3D52", "#F4DC71", "#F6FFFD", "#061934", "#485360"];
-
 const Wrapper = styled.div`
+  background-color: #eaecf4;
   display: flex;
-  width: 100vw;
-  min-height: 100vh;
-  background: skyblue;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  font-family: Verdana, Geneva, sans-serif;
 `;
 
-const Box = styled.div`
-  flex-basis: ${props => props.width}%;
-  background: ${props => props.bgColor};
-  // border-right: 1px solid white;
+const ImageWrapper = styled.div`
+  > img {
+    border-radius: 5px;
+    max-height: 500px;
+  }
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
-class EntranceAnimation extends Component {
+const Button = styled.button`
+  width: 100px;
+  height: 50px;
+  border-radius: 5px;
+  background-color: #8e4055;
+  color: white;
+  margin-top: 10px;
+`;
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      opacityNum: 1,
+      imgSrc: "http://thecatapi.com/api/images/get?format=src&type=gif",
+      key: 10
+    };
+  }
+
+  handleClick = () => {
+    this.setState(prevState => {
+      console.log(prevState);
+      return {
+        imgSrc:
+          "http://thecatapi.com/api/images/get?format=src&type=gif&" +
+          this.state.key,
+        key: prevState.key + 1,
+        opacityNum: 0
+      };
+    });
+
+    this.loadImage(
+      "http://thecatapi.com/api/images/get?format=src&type=gif&" +
+        this.state.key
+    ).then(img => {
+      this.setState({
+        opacityNum: 1
+      });
+      console.log(img);
+    });
+  };
+
+  loadImage = url => {
+    return new Promise((resolve, reject) => {
+      let image = new Image();
+
+      image.onload = function() {
+        resolve(image);
+      };
+
+      image.src = url;
+    });
+  };
+
   render() {
     return (
-      <StaggeredMotion
-        defaultStyles={[
-          { width: 100 },
-          { width: 100 },
-          { width: 100 },
-          { width: 100 }
-        ]}
-        styles={prevStyles => [
-          { width: spring(0) },
-          { width: spring(prevStyles[0].width) },
-          { width: spring(prevStyles[1].width) },
-          { width: spring(prevStyles[2].width) }
-        ]}
-      >
-        {styles => (
-          <Wrapper>
-            <Box bgColor={colorArray[0]} width={styles[0].width} />
-            <Box bgColor={colorArray[1]} width={styles[1].width} />
-            <Box bgColor={colorArray[3]} width={styles[2].width} />
-            <Box bgColor={colorArray[4]} width={styles[3].width} />
-          </Wrapper>
-        )}
-      </StaggeredMotion>
+      <Wrapper>
+        <Motion
+          key={this.state.key}
+          defaultStyle={{ opacity: 0 }}
+          style={{
+            opacity: spring(this.state.opacityNum, {
+              stiffness: 20,
+              damping: 30
+            })
+          }}
+        >
+          {style => (
+            <ImageWrapper style={style}>
+              <img src={this.state.imgSrc} />
+            </ImageWrapper>
+          )}
+        </Motion>
+        <Button onClick={this.handleClick}>Cat Me!</Button>
+      </Wrapper>
     );
   }
 }
 
-export default EntranceAnimation;
+export default App;
