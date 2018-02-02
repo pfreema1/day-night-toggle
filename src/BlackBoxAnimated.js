@@ -10,8 +10,15 @@ const BlackBox = styled.div`
   transform-origin: ${props => props.xDirection} center;
 `;
 
-const BlackBoxAnimated = ({ heightPercentage, reverseDirection = false }) => (
-  <Motion defaultStyle={{ scaleX: 1 }} style={{ scaleX: spring(0) }}>
+const BlackBoxAnimated = ({
+  startAnimation = false,
+  heightPercentage,
+  reverseDirection = false
+}) => (
+  <Motion
+    defaultStyle={{ scaleX: 1 }}
+    style={{ scaleX: spring(startAnimation ? 0 : 1) }}
+  >
     {style => (
       <BlackBox
         heightPercentage={heightPercentage}
