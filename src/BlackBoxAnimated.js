@@ -17,7 +17,9 @@ const BlackBoxAnimated = ({
 }) => (
   <Motion
     defaultStyle={{ scaleX: 1 }}
-    style={{ scaleX: spring(startAnimation ? 0 : 1) }}
+    style={{
+      scaleX: spring(startAnimation ? 0 : 1, { stiffness: 180, damping: 30 })
+    }}
   >
     {style => (
       <BlackBox
