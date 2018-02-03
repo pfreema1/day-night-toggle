@@ -1,100 +1,96 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Motion, StaggeredMotion, spring } from "react-motion";
+import { Motion, spring } from "react-motion";
 
-const OutterWrapper = styled.div`
-  width: 100%;
+/* 
+  STYLING
+*/
+
+/* styling vars */
+//general
+const borderThickness = 5;
+
+//day
+const dayWrapperBgColor = "RGBA(199, 229, 245, 1.00)";
+const dayWrapperBorderColor = "RGBA(142, 193, 212, 1.00)";
+const dayButtonBgColor = "RGBA(244, 236, 87, 1.00)";
+const dayButtonBorderColor = "RGBA(224, 197, 89, 1.00)";
+
+//night
+const nightWrapperBgColor = "RGBA(72, 72, 72, 1.00)";
+const nightWrapperBorderColor = "RGBA(32, 32, 32, 1.00)";
+const nightButtonBgColor = "RGBA(255, 253, 242, 1.00)";
+const nightButtonBorderColor = "RGBA(225, 228, 198, 1.00)";
+
+const Wrapper = styled.div`
+  background-color: #f3f3f3;
   height: 100vh;
   display: flex;
   justify-content: center;
-  background: #e0f7fa;
-`;
-
-const InnerWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  flex-flow: row nowrap;
-  width: 15rem;
-  height: 100%;
-  // border: 1px solid blue;
 `;
 
-const Ball = styled.div`
-  width: 3rem;
-  height: 3rem;
-  background: red;
-  border-radius: 50%;
+const ButtonWrapper = styled.div`
+  width: 180px;
+  height: 80px;
+  background-color: ${nightWrapperBgColor};
+  border: ${borderThickness}px solid ${nightWrapperBorderColor};
+  position: relative;
+  border-radius: 100px;
 `;
+
+const Button = styled.div`
+  border-radius: 50%;
+  background-color: ${nightButtonBgColor};
+  border: ${borderThickness}px solid ${nightButtonBorderColor};
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  top: 50%;
+  transform: translate3d(0, -50%, 0); //the x value moves from 0px to 100px
+  left: 5px;
+`;
+
+/* 
+  END STYLING
+*/
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      open: false
+    };
   }
 
+  handleClick = () => {
+    // console.log("clicked!");
+    this.setState(prevState => {
+      return { open: !prevState.open };
+    });
+  };
+
   render() {
-    const springConfigObj = { stiffness: 20, damping: 17 };
     return (
-      <OutterWrapper>
-        <StaggeredMotion
-          defaultStyles={[
-            { y: 300, o: 0, x: 300 },
-            { y: 300, o: 0, x: 300 },
-            { y: 300, o: 0, x: 300 },
-            { y: 300, o: 0, x: 300 }
-          ]}
-          styles={prevInterpolatedStyles => {
-            return prevInterpolatedStyles.map((_, i) => {
-              return i === 0
-                ? {
-                    y: spring(0, springConfigObj),
-                    o: spring(1),
-                    x: spring(0, springConfigObj)
-                  }
-                : {
-                    y: spring(prevInterpolatedStyles[i - 1].y),
-                    o: spring(prevInterpolatedStyles[i - 1].o),
-                    x: spring(prevInterpolatedStyles[i - 1].x)
-                  };
-            });
-          }}
-        >
-          {interpolatingStyles => (
-            <InnerWrapper>
-              {interpolatingStyles.map((style, i) => {
-                let movement;
-                if (i === 0) {
-                  // movement = style.y;
-                  movement = "translate3d(" + style.x * -1 + "px, 0, 0)";
-                } else if (i === 1) {
-                  // movement = style.y * -1;
-                  movement = "translate3d(0," + style.y * -1 + "px, 0)";
-                } else if (i === 2) {
-                  // movement = style.y;
-                  movement = "translate3d(0," + style.y + "px, 0)";
-                } else if (i === 3) {
-                  // movement = style.y * -1;
-                  movement = "translate3d(" + style.x + "px, 0, 0)";
-                }
-
-                console.log(movement);
-
-                return (
-                  <Ball
-                    key={i}
-                    style={{
-                      transform: movement,
-                      opacity: `${style.o}`
-                    }}
-                  />
-                );
-              })}
-            </InnerWrapper>
-          )}
-        </StaggeredMotion>
-      </OutterWrapper>
+      <Motion
+        style={{
+          x: spring(this.state.open ? 100 : 0),
+          color: spring(this.state.open ? 0 : 1)
+        }}
+      >
+        {style => {
+          return (
+            <Wrapper>
+              <ButtonWrapper onClick={this.handleClick}>
+                <Button
+                  style={{ transform: `translate3d(${style.x}px, -50%, 0)` }}
+                />
+              </ButtonWrapper>
+            </Wrapper>
+          );
+        }}
+      </Motion>
     );
   }
 }
