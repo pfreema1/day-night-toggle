@@ -229,7 +229,8 @@ class App extends React.Component {
                 />
                 <CloudWrapper
                   style={{
-                    transform: `translate3d(-50%, 0, 0) scale(${style.scale})`
+                    transform: `translate3d(-50%, 0, 0) scale(${style.scale})`,
+                    opacity: `${this.state.open ? 1 : style.color}`
                   }}
                 >
                   {/* default transform values:  transform: translate3d(-50%, 0, 0) scale(0.9); */}
