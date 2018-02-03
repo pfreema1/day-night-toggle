@@ -74,17 +74,24 @@ class App extends React.Component {
   render() {
     return (
       <Motion
+        
         style={{
           x: spring(this.state.open ? 100 : 0),
           color: spring(this.state.open ? 0 : 1)
         }}
       >
         {style => {
+          const rgbaButton = {
+            r: Math.round(style.color * 255),
+            g: Math.round(style.color * 255),
+            b: Math.round(style.color * 255),
+            a: 1.0
+          };
           return (
             <Wrapper>
               <ButtonWrapper onClick={this.handleClick}>
                 <Button
-                  style={{ transform: `translate3d(${style.x}px, -50%, 0)` }}
+                  style={{ transform: `translate3d(${style.x}px, -50%, 0)`, background-color: `rgba(${rgbaButton.r}, ${rgbaButton.g}, ${rgbaButton.b}, ${rgbaButton.a})` }}
                 />
               </ButtonWrapper>
             </Wrapper>
