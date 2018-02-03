@@ -2,107 +2,53 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { Motion, StaggeredMotion, spring } from "react-motion";
 
-const Wrapper = styled.div`
-  background-color: #eaecf4;
+const OutterWrapper = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  height: 100vh;
-  font-family: Verdana, Geneva, sans-serif;
+  background: #e0f7fa;
 `;
 
-const ImageWrapper = styled.div`
-  > img {
-    border-radius: 5px;
-    max-height: 500px;
-  }
-  height: 500px;
+const InnerWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  flex-flow: row nowrap;
+  width: 15rem;
+  height: 100%;
 `;
 
-const Button = styled.button`
-  width: 100px;
-  height: 50px;
-  border-radius: 5px;
-  background-color: #8e4055;
-  color: white;
-  margin-top: 10px;
+const Ball = styled.div`
+  width: 3rem;
+  height: 3rem;
+  background: red;
+  border-radius: 50%;
+  transform: translate3d(0);
 `;
 
-class App extends Component {
+class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      opacityNum: 1,
-      imgSrc: "http://thecatapi.com/api/images/get?format=src&type=gif",
-      key: 10
-    };
+    /*
+        Settings Values
+    */
+    this.startY = 100;
+    this.startOpacity = 0;
+
+    this.initialStiffness = 400;
+    this.initialDamping = 60;
+
+    this.finalStiffness = 400;
+    this.finalDamping = 60;
+
+    this.state = {};
+    /* --------------------------- */
   }
 
-  handleClick = () => {
-    //first set imgSrc to new src with cache buster, increment key to restart animation, and put opacityNum at
-    //0 so the animation restarts
-    this.setState(prevState => {
-      console.log(prevState);
-      return {
-        imgSrc:
-          "http://thecatapi.com/api/images/get?format=src&type=gif&" +
-          this.state.key,
-        key: prevState.key + 1,
-        opacityNum: 0
-      };
-    });
-
-    //load the image and when it is loaded, re-set the opacityNum to 1 so the animation will run
-    this.loadImage(
-      "http://thecatapi.com/api/images/get?format=src&type=gif&" +
-        this.state.key
-    ).then(img => {
-      this.setState({
-        opacityNum: 1
-      });
-      console.log(img);
-    });
-  };
-
-  loadImage = url => {
-    return new Promise((resolve, reject) => {
-      let image = new Image();
-
-      image.onload = function() {
-        resolve(image);
-      };
-
-      image.src = url;
-    });
-  };
-
   render() {
-    return (
-      <Wrapper>
-        <Motion
-          key={this.state.key}
-          defaultStyle={{ opacity: 0 }}
-          style={{
-            opacity: spring(this.state.opacityNum, {
-              stiffness: 20,
-              damping: 30
-            })
-          }}
-        >
-          {style => (
-            <ImageWrapper style={style}>
-              <img src={this.state.imgSrc} />
-            </ImageWrapper>
-          )}
-        </Motion>
-        <Button onClick={this.handleClick}>Cat Me!</Button>
-      </Wrapper>
-    );
+    return <OutterWrapper />;
   }
 }
 
