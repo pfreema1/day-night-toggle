@@ -8,6 +8,7 @@
     "react-dom": "^16.2.0",
     "react-motion": "^0.5.2",
     "react-scripts": "1.1.0",
+    "simple-linear-scale": "^1.0.1",
     "styled-components": "^3.1.5"
   },
   "scripts": {
