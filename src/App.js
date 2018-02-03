@@ -24,7 +24,7 @@ const Ball = styled.div`
   height: 3rem;
   background: red;
   border-radius: 50%;
-  transform: translate3d(0);
+  transform: translate3d(0, ${props => props.y}px, 0);
 `;
 
 class App extends React.Component {
@@ -48,7 +48,34 @@ class App extends React.Component {
   }
 
   render() {
-    return <OutterWrapper />;
+    return (
+      <OutterWrapper>
+        <StaggeredMotion
+          defaultStyles={[
+            //add more items here for more dots  ****not sure if the 'this' values will work!
+            {y: 100, o: 0 },
+            {y: 100, o: 0 },
+            {y: 100, o: 0 },
+            {y: 100, o: 0 }
+          ]}
+          styles={prevInterpolatedStyles => prevInterpolatedStyles.map((_, i) => {
+            return i === 0
+              // initial stiffness and damping
+              ? { y: spring(0), o: spring(1) }
+              // final stiffness and damping
+              : {
+                  y: spring(prevInterpolatedStyles[i - 1].y),
+                  o: spring(prevInterpolatedStyles[i - 1].o)
+                };
+          })
+
+          }
+        >
+          {interpolatingStyles =>}
+
+        </StaggeredMotion>
+      </OutterWrapper>
+    );
   }
 }
 
