@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Motion, spring } from "react-motion";
+import { Motion, spring, StaggeredMotion } from "react-motion";
 import LinearScale from "simple-linear-scale";
 
 /* 
@@ -125,6 +125,61 @@ const CloudSmall = styled.div`
   left: 60%;
 `;
 
+const Star1 = styled.div`
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: RGBA(255, 255, 255, 1);
+  border: 1px solid red;
+`;
+
+const Star2 = styled.div`
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: RGBA(255, 255, 255, 1);
+  border: 1px solid red;
+`;
+
+const Star3 = styled.div`
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: RGBA(255, 255, 255, 1);
+  border: 1px solid red;
+`;
+
+const Star4 = styled.div`
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: RGBA(255, 255, 255, 1);
+  border: 1px solid red;
+`;
+
+const Star5 = styled.div`
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: RGBA(255, 255, 255, 1);
+  border: 1px solid red;
+`;
+
+const Star6 = styled.div`
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: RGBA(255, 255, 255, 1);
+  border: 1px solid red;
+`;
+const Star7 = styled.div`
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: RGBA(255, 255, 255, 1);
+  border: 1px solid red;
+`;
+
 /* 
   END STYLING
 */
@@ -238,6 +293,38 @@ class App extends React.Component {
                   <CloudMedium />
                   <CloudSmall />
                 </CloudWrapper>
+                <StaggeredMotion
+                  defaultStyles={[
+                    { starScale: 1 },
+                    { starScale: 1 },
+                    { starScale: 1 },
+                    { starScale: 1 },
+                    { starScale: 1 },
+                    { starScale: 1 },
+                    { starScale: 1 }
+                  ]}
+                  styles={prevInterpolatedStyles =>
+                    prevInterpolatedStyles.map((_, i) => {
+                      return i === 0
+                        ? { starScale: spring(0) }
+                        : {
+                            starScale: spring(
+                              prevInterpolatedStyles[i - 1].starScale
+                            )
+                          };
+                    })
+                  }
+                >
+                  {interpolatingStyles => {
+                    return interpolatingStyles.map((style, i) => (
+                      <div>shoo</div>
+                      // <Star1
+                      //   key={i}
+                      //   style={{ transform: `scale(${style.starScale})` }}
+                      // />
+                    ));
+                  }}
+                </StaggeredMotion>
               </ButtonWrapper>
             </Wrapper>
           );
