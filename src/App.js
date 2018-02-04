@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Motion, spring, StaggeredMotion } from "react-motion";
 import LinearScale from "simple-linear-scale";
@@ -12,10 +12,6 @@ import LinearScale from "simple-linear-scale";
 const borderThickness = 5;
 
 //day
-const dayWrapperBgColor = "RGBA(199, 229, 245, 1.00)";
-const dayWrapperBorderColor = "RGBA(142, 193, 212, 1.00)";
-const dayButtonBgColor = "RGBA(244, 236, 87, 1.00)";
-const dayButtonBorderColor = "RGBA(224, 197, 89, 1.00)";
 
 //night
 const nightWrapperBgColor = "RGBA(72, 72, 72, 1.00)";
@@ -48,9 +44,15 @@ const wrapperBorderColorScale = {
   b: LinearScale([0, 1], [32, 212])
 };
 
-const Wrapper = styled.div`
+const mainWrapperBgColorScale = {
+  r: LinearScale([0, 1], [122, 238]),
+  g: LinearScale([0, 1], [112, 254]),
+  b: LinearScale([0, 1], [110, 253])
+};
+
+const MainWrapper = styled.div`
   background-color: #f3f3f3;
-  height: 100vh;
+  height: 95vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -125,6 +127,59 @@ const CloudSmall = styled.div`
   left: 60%;
 `;
 
+const MoonCraterLarge = styled.div`
+  width: 12px;
+  height: 12px;
+  border: ${borderThickness}px solid RGBA(225, 227, 199, 1);
+  position: absolute;
+  // border: 1px solid red;
+  background: RGBA(239, 238, 219, 1);
+  border-radius: 50%;
+  top: 3%;
+  left: 53%;
+`;
+const MoonCraterMedium = styled.div`
+  width: 5px;
+  height: 5px;
+  border: ${borderThickness}px solid RGBA(225, 227, 199, 1);
+  position: absolute;
+  // border: 1px solid red;
+  background: RGBA(239, 238, 219, 1);
+  border-radius: 50%;
+  top: 67%;
+  left: 46%;
+`;
+const MoonCraterSmall = styled.div`
+  width: 2px;
+  height: 2px;
+  border: ${borderThickness}px solid RGBA(225, 227, 199, 1);
+  position: absolute;
+  // border: 1px solid red;
+  background: RGBA(239, 238, 219, 1);
+  border-radius: 50%;
+  top: 15%;
+  left: 7%;
+`;
+
+const Star = styled.div`
+  border-radius: 50%;
+  background: RGBA(255, 255, 255, 1);
+  // border: 1px solid red;
+  position: absolute;
+`;
+
+const Respect = styled.div`
+  margin-left: 20px;
+  font-family: Helvetica, Arial, Sans-Serif;
+  display: flex;
+  align-items: center;
+  height: 5vh;
+  > div a {
+    font-weight: bold;
+    margin-left: 10px;
+  }
+`;
+// element attributes
 const starWidthHeightArr = [10, 4, 8, 6, 9, 5, 7];
 const starPosArr = [
   {
@@ -156,13 +211,6 @@ const starPosArr = [
     left: "44%"
   }
 ];
-
-const Star = styled.div`
-  border-radius: 50%;
-  background: RGBA(255, 255, 255, 1);
-  // border: 1px solid red;
-  position: absolute;
-`;
 
 /* 
   END STYLING
@@ -206,144 +254,187 @@ class App extends React.Component {
 
   render() {
     return (
-      <Motion
-        style={{
-          x: spring(this.state.open ? 100 : 0),
-          color: spring(this.state.open ? 1 : 0),
-          scale: spring(
-            this.state.open ? 0.9 : 0,
-            this.state.open
-              ? this.springScaleSettingsOpen
-              : this.springScaleSettingsClosed
-          )
-        }}
-      >
-        {style => {
-          /* 
+      <div>
+        <Motion
+          style={{
+            x: spring(this.state.open ? 100 : 0),
+            color: spring(this.state.open ? 1 : 0),
+            scale: spring(
+              this.state.open ? 0.9 : 0,
+              this.state.open
+                ? this.springScaleSettingsOpen
+                : this.springScaleSettingsClosed
+            ),
+            craterOpacity: spring(this.state.open ? 0 : 1),
+            buttonRotation: spring(this.state.open ? 0 : 45)
+          }}
+        >
+          {style => {
+            /* 
               using the scaling function to translate the interpolated color value (0 - 1) into 
               the correct rgba values (between night color and day color)
           */
-          const rgbaButtonBgValues = {
-            r: Math.round(buttonBgColorScale.r(style.color)),
-            g: Math.round(buttonBgColorScale.g(style.color)),
-            b: Math.round(buttonBgColorScale.b(style.color))
-          };
+            const rgbaButtonBgValues = {
+              r: Math.round(buttonBgColorScale.r(style.color)),
+              g: Math.round(buttonBgColorScale.g(style.color)),
+              b: Math.round(buttonBgColorScale.b(style.color))
+            };
 
-          const rgbaButtonBorderValues = {
-            r: Math.round(buttonBorderColorScale.r(style.color)),
-            g: Math.round(buttonBorderColorScale.g(style.color)),
-            b: Math.round(buttonBorderColorScale.b(style.color))
-          };
+            const rgbaButtonBorderValues = {
+              r: Math.round(buttonBorderColorScale.r(style.color)),
+              g: Math.round(buttonBorderColorScale.g(style.color)),
+              b: Math.round(buttonBorderColorScale.b(style.color))
+            };
 
-          const rgbaWrapperBgValues = {
-            r: Math.round(wrapperBgColorScale.r(style.color)),
-            g: Math.round(wrapperBgColorScale.g(style.color)),
-            b: Math.round(wrapperBgColorScale.b(style.color))
-          };
+            const rgbaWrapperBgValues = {
+              r: Math.round(wrapperBgColorScale.r(style.color)),
+              g: Math.round(wrapperBgColorScale.g(style.color)),
+              b: Math.round(wrapperBgColorScale.b(style.color))
+            };
 
-          const rgbaWrapperBorderValues = {
-            r: Math.round(wrapperBorderColorScale.r(style.color)),
-            g: Math.round(wrapperBorderColorScale.g(style.color)),
-            b: Math.round(wrapperBorderColorScale.b(style.color))
-          };
+            const rgbaWrapperBorderValues = {
+              r: Math.round(wrapperBorderColorScale.r(style.color)),
+              g: Math.round(wrapperBorderColorScale.g(style.color)),
+              b: Math.round(wrapperBorderColorScale.b(style.color))
+            };
 
-          //const dayButtonBgColor = "RGBA(244, 236, 87, 1.00)";
-          return (
-            <Wrapper>
-              <ButtonWrapper
-                onClick={this.handleClick}
+            const rgbaMainWrapperBgValues = {
+              r: Math.round(mainWrapperBgColorScale.r(style.color)),
+              g: Math.round(mainWrapperBgColorScale.g(style.color)),
+              b: Math.round(mainWrapperBgColorScale.b(style.color))
+            };
+
+            // const rgbaWrapperBgValues
+
+            return (
+              <MainWrapper
                 style={{
-                  background: `rgba(${rgbaWrapperBgValues.r}, ${
-                    rgbaWrapperBgValues.g
-                  }, ${rgbaWrapperBgValues.b}, 1`,
-                  border: `${borderThickness}px solid rgba(${
-                    rgbaWrapperBorderValues.r
-                  }, ${rgbaWrapperBorderValues.g}, ${
-                    rgbaWrapperBorderValues.b
-                  }, 1`
+                  background: `rgba(${rgbaMainWrapperBgValues.r}, ${
+                    rgbaMainWrapperBgValues.g
+                  }, ${rgbaMainWrapperBgValues.b}, 1`
                 }}
               >
-                <Button
+                <ButtonWrapper
+                  onClick={this.handleClick}
                   style={{
-                    transform: `translate3d(${style.x}px, -50%, 0)`,
-                    background: `rgba(${rgbaButtonBgValues.r}, ${
-                      rgbaButtonBgValues.g
-                    }, ${rgbaButtonBgValues.b}, 1`,
+                    background: `rgba(${rgbaWrapperBgValues.r}, ${
+                      rgbaWrapperBgValues.g
+                    }, ${rgbaWrapperBgValues.b}, 1`,
                     border: `${borderThickness}px solid rgba(${
-                      rgbaButtonBorderValues.r
-                    }, ${rgbaButtonBorderValues.g}, ${
-                      rgbaButtonBorderValues.b
+                      rgbaWrapperBorderValues.r
+                    }, ${rgbaWrapperBorderValues.g}, ${
+                      rgbaWrapperBorderValues.b
                     }, 1`
                   }}
-                />
-                <CloudWrapper
-                  style={{
-                    transform: `translate3d(-50%, 0, 0) scale(${style.scale})`,
-                    opacity: `${this.state.open ? 1 : style.color}`
-                  }}
                 >
-                  {/* default transform values:  transform: translate3d(-50%, 0, 0) scale(0.9); */}
-                  <CloudLarge />
-                  <CloudMedium />
-                  <CloudSmall />
-                </CloudWrapper>
-                <StaggeredMotion
-                  defaultStyles={[
-                    { starScale: 1 },
-                    { starScale: 1 },
-                    { starScale: 1 },
-                    { starScale: 1 },
-                    { starScale: 1 },
-                    { starScale: 1 },
-                    { starScale: 1 }
-                  ]}
-                  styles={prevInterpolatedStyles =>
-                    prevInterpolatedStyles.map((_, i) => {
-                      return i === 0
-                        ? {
-                            starScale: this.state.open
-                              ? spring(0, this.starScaleSettingsOpen)
-                              : spring(1, this.starScaleSettingsClosed)
-                          }
-                        : {
-                            starScale: this.state.open
-                              ? spring(
-                                  prevInterpolatedStyles[i - 1].starScale,
-                                  this.starScaleSettingsOpen
-                                )
-                              : spring(
-                                  prevInterpolatedStyles[i - 1].starScale,
-                                  this.starScaleSettingsClosed
-                                )
-                          };
-                    })
-                  }
-                >
-                  {interpolatingStyles => (
-                    <div>
-                      {interpolatingStyles.map((style, i) => {
-                        // console.log(i);
-                        return (
-                          <Star
-                            key={i}
-                            style={{
-                              transform: `scale(${style.starScale})`,
-                              width: `${starWidthHeightArr[i]}px`,
-                              height: `${starWidthHeightArr[i]}px`,
-                              top: `${starPosArr[i].top}`,
-                              left: `${starPosArr[i].left}`
-                            }}
-                          />
-                        );
-                      })}
-                    </div>
-                  )}
-                </StaggeredMotion>
-              </ButtonWrapper>
-            </Wrapper>
-          );
-        }}
-      </Motion>
+                  <Button
+                    style={{
+                      transform: `translate3d(${style.x}px, -50%, 0) rotate(-${
+                        style.buttonRotation
+                      }deg)`,
+                      background: `rgba(${rgbaButtonBgValues.r}, ${
+                        rgbaButtonBgValues.g
+                      }, ${rgbaButtonBgValues.b}, 1`,
+                      border: `${borderThickness}px solid rgba(${
+                        rgbaButtonBorderValues.r
+                      }, ${rgbaButtonBorderValues.g}, ${
+                        rgbaButtonBorderValues.b
+                      }, 1`
+                    }}
+                  >
+                    <MoonCraterLarge
+                      style={{ opacity: `${style.craterOpacity}` }}
+                    />
+                    <MoonCraterMedium
+                      style={{ opacity: `${style.craterOpacity}` }}
+                    />
+                    <MoonCraterSmall
+                      style={{ opacity: `${style.craterOpacity}` }}
+                    />
+                  </Button>
+                  <CloudWrapper
+                    style={{
+                      transform: `translate3d(-50%, 0, 0) scale(${
+                        style.scale
+                      })`,
+                      opacity: `${this.state.open ? 1 : style.color}`
+                    }}
+                  >
+                    {/* default transform values:  transform: translate3d(-50%, 0, 0) scale(0.9); */}
+                    <CloudLarge />
+                    <CloudMedium />
+                    <CloudSmall />
+                  </CloudWrapper>
+                  <StaggeredMotion
+                    defaultStyles={[
+                      { starScale: 1 },
+                      { starScale: 1 },
+                      { starScale: 1 },
+                      { starScale: 1 },
+                      { starScale: 1 },
+                      { starScale: 1 },
+                      { starScale: 1 }
+                    ]}
+                    styles={prevInterpolatedStyles =>
+                      prevInterpolatedStyles.map((_, i) => {
+                        return i === 0
+                          ? {
+                              starScale: this.state.open
+                                ? spring(0, this.starScaleSettingsOpen)
+                                : spring(1, this.starScaleSettingsClosed)
+                            }
+                          : {
+                              starScale: this.state.open
+                                ? spring(
+                                    prevInterpolatedStyles[i - 1].starScale,
+                                    this.starScaleSettingsOpen
+                                  )
+                                : spring(
+                                    prevInterpolatedStyles[i - 1].starScale,
+                                    this.starScaleSettingsClosed
+                                  )
+                            };
+                      })
+                    }
+                  >
+                    {interpolatingStyles => (
+                      <div>
+                        {interpolatingStyles.map((style, i) => {
+                          // console.log(i);
+                          return (
+                            <Star
+                              key={i}
+                              style={{
+                                transform: `scale(${style.starScale})`,
+                                width: `${starWidthHeightArr[i]}px`,
+                                height: `${starWidthHeightArr[i]}px`,
+                                top: `${starPosArr[i].top}`,
+                                left: `${starPosArr[i].left}`
+                              }}
+                            />
+                          );
+                        })}
+                      </div>
+                    )}
+                  </StaggeredMotion>
+                </ButtonWrapper>
+              </MainWrapper>
+            );
+          }}
+        </Motion>
+        <Respect>
+          <div>
+            Design inspired by:
+            <a
+              rel="noopener noreferrer"
+              target="_blank"
+              href="https://dribbble.com/shots/1907553-Day-Night-Toggle-Button"
+            >
+              Ramakrishna V
+            </a>
+          </div>
+        </Respect>
+      </div>
     );
   }
 }
