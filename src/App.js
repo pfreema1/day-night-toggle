@@ -169,11 +169,16 @@ const Star = styled.div`
 `;
 
 const Respect = styled.div`
-  margin-left: 20px;
+  // margin-left: 20px;
   font-family: Helvetica, Arial, Sans-Serif;
   display: flex;
   align-items: center;
   height: 5vh;
+  // width: 100vw;
+  background: RGBA(226, 227, 202, 1);
+  > div {
+    margin-left: 20px;
+  }
   > div a {
     font-weight: bold;
     margin-left: 10px;
