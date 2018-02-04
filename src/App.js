@@ -125,59 +125,43 @@ const CloudSmall = styled.div`
   left: 60%;
 `;
 
-const Star1 = styled.div`
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: RGBA(255, 255, 255, 1);
-  border: 1px solid red;
-`;
+const starWidthHeightArr = [10, 4, 8, 6, 9, 5, 7];
+const starPosArr = [
+  {
+    top: "36%",
+    left: "86%"
+  },
+  {
+    top: "25%",
+    left: "59%"
+  },
+  {
+    top: "78%",
+    left: "50%"
+  },
+  {
+    top: "8%",
+    left: "80%"
+  },
+  {
+    top: "70%",
+    left: "83%"
+  },
+  {
+    top: "56%",
+    left: "69%"
+  },
+  {
+    top: "10%",
+    left: "44%"
+  }
+];
 
-const Star2 = styled.div`
-  width: 2px;
-  height: 2px;
+const Star = styled.div`
   border-radius: 50%;
   background: RGBA(255, 255, 255, 1);
-  border: 1px solid red;
-`;
-
-const Star3 = styled.div`
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: RGBA(255, 255, 255, 1);
-  border: 1px solid red;
-`;
-
-const Star4 = styled.div`
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: RGBA(255, 255, 255, 1);
-  border: 1px solid red;
-`;
-
-const Star5 = styled.div`
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: RGBA(255, 255, 255, 1);
-  border: 1px solid red;
-`;
-
-const Star6 = styled.div`
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: RGBA(255, 255, 255, 1);
-  border: 1px solid red;
-`;
-const Star7 = styled.div`
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: RGBA(255, 255, 255, 1);
-  border: 1px solid red;
+  // border: 1px solid red;
+  position: absolute;
 `;
 
 /* 
@@ -196,6 +180,16 @@ class App extends React.Component {
     this.springScaleSettingsClosed = {
       stiffness: 270,
       damping: 30
+    };
+
+    this.starScaleSettingsOpen = {
+      stiffness: 1070,
+      damping: 40
+    };
+
+    this.starScaleSettingsClosed = {
+      stiffness: 300,
+      damping: 18
     };
 
     this.state = {
@@ -306,24 +300,44 @@ class App extends React.Component {
                   styles={prevInterpolatedStyles =>
                     prevInterpolatedStyles.map((_, i) => {
                       return i === 0
-                        ? { starScale: spring(0) }
+                        ? {
+                            starScale: this.state.open
+                              ? spring(0, this.starScaleSettingsOpen)
+                              : spring(1, this.starScaleSettingsClosed)
+                          }
                         : {
-                            starScale: spring(
-                              prevInterpolatedStyles[i - 1].starScale
-                            )
+                            starScale: this.state.open
+                              ? spring(
+                                  prevInterpolatedStyles[i - 1].starScale,
+                                  this.starScaleSettingsOpen
+                                )
+                              : spring(
+                                  prevInterpolatedStyles[i - 1].starScale,
+                                  this.starScaleSettingsClosed
+                                )
                           };
                     })
                   }
                 >
-                  {interpolatingStyles => {
-                    return interpolatingStyles.map((style, i) => (
-                      <div>shoo</div>
-                      // <Star1
-                      //   key={i}
-                      //   style={{ transform: `scale(${style.starScale})` }}
-                      // />
-                    ));
-                  }}
+                  {interpolatingStyles => (
+                    <div>
+                      {interpolatingStyles.map((style, i) => {
+                        // console.log(i);
+                        return (
+                          <Star
+                            key={i}
+                            style={{
+                              transform: `scale(${style.starScale})`,
+                              width: `${starWidthHeightArr[i]}px`,
+                              height: `${starWidthHeightArr[i]}px`,
+                              top: `${starPosArr[i].top}`,
+                              left: `${starPosArr[i].left}`
+                            }}
+                          />
+                        );
+                      })}
+                    </div>
+                  )}
                 </StaggeredMotion>
               </ButtonWrapper>
             </Wrapper>
